@@ -97,13 +97,21 @@ def login(payload: LoginRequest, response: Response) -> dict[str, Any]:
             )
 
         if not verify_password(payload.password, user["pw_hash"]):
-            failed = user["failed_logins"] + 1
-            locked_until = (now + LOCKOUT_SECONDS) if failed >= MAX_FAILED_LOGINS else None
+            # Atomic increment so concurrent requests don't race each other
             execute(
                 conn,
-                "UPDATE users SET failed_logins = ?, locked_until = ? WHERE id = ?",
-                (failed, locked_until, user["id"]),
+                "UPDATE users SET failed_logins = failed_logins + 1 WHERE id = ?",
+                (user["id"],),
             )
+            updated = fetch_one(conn, "SELECT failed_logins FROM users WHERE id = ?", (user["id"],))
+            failed = updated["failed_logins"] if updated else MAX_FAILED_LOGINS
+            if failed >= MAX_FAILED_LOGINS:
+                locked_until = now + LOCKOUT_SECONDS
+                execute(
+                    conn,
+                    "UPDATE users SET locked_until = ? WHERE id = ?",
+                    (locked_until, user["id"]),
+                )
             insert_audit_event(
                 conn,
                 actor=user["username"],
@@ -113,7 +121,7 @@ def login(payload: LoginRequest, response: Response) -> dict[str, Any]:
                 result="failure",
                 detail={"failed_logins": failed},
             )
-            if locked_until is not None:
+            if failed >= MAX_FAILED_LOGINS:
                 raise HTTPException(
                     status_code=429,
                     detail={"error": {"code": "RATE_LIMITED", "message": "Too many failed attempts; try again later"}},
