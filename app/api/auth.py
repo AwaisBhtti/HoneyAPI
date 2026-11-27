@@ -113,6 +113,11 @@ def login(payload: LoginRequest, response: Response) -> dict[str, Any]:
                 result="failure",
                 detail={"failed_logins": failed},
             )
+            if locked_until is not None:
+                raise HTTPException(
+                    status_code=429,
+                    detail={"error": {"code": "RATE_LIMITED", "message": "Too many failed attempts; try again later"}},
+                )
             raise _auth_error()
 
         # Reset failed logins on success
