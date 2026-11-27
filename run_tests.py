@@ -8,7 +8,7 @@ import sqlite3
 import sys
 from pathlib import Path
 
-import requests
+import httpx
 
 BASE = "http://127.0.0.1:8000"
 
@@ -35,8 +35,8 @@ def section(title: str) -> None:
     print(f"\n{'='*60}\n  {title}\n{'='*60}", flush=True)
 
 
-def login(username: str, password: str) -> requests.Session:
-    s = requests.Session()
+def login(username: str, password: str) -> tuple[httpx.Client, httpx.Response]:
+    s = httpx.Client(follow_redirects=False)
     r = s.post(f"{BASE}/console/login", json={"username": username, "password": password})
     csrf = r.json().get("csrf_token", "") if r.status_code == 200 else ""
     s.headers.update({"X-CSRF-Token": csrf})
@@ -45,13 +45,13 @@ def login(username: str, password: str) -> requests.Session:
 
 # ── 1. Health ──────────────────────────────────────────────────
 section("1. Health Check")
-r = requests.get(f"{BASE}/health")
+r = httpx.get(f"{BASE}/health")
 check("GET /health -> 200", r.status_code == 200)
 check("Returns {status: ok}", r.json() == {"status": "ok"})
 
 # ── 2. Decoy Endpoints ─────────────────────────────────────────
 section("2. Public Decoy Endpoints (no auth required)")
-anon = requests.Session()
+anon = httpx.Client(follow_redirects=False)
 for path, method, expected in [
     ("/.env",            "GET",  200),
     ("/admin",           "GET",  401),
@@ -68,7 +68,7 @@ for path, method, expected in [
 # ── 3. Payload Too Large ───────────────────────────────────────
 section("3. Payload Too Large (T-final)")
 big = b"x" * (1024 * 1024 + 1)
-r = anon.post(f"{BASE}/wp-login.php", data=big, headers={"content-length": str(len(big))})
+r = anon.post(f"{BASE}/wp-login.php", content=big, headers={"content-length": str(len(big))})
 check("Oversized body -> 413", r.status_code == 413)
 check("Code: PAYLOAD_TOO_LARGE", r.json().get("error", {}).get("code") == "PAYLOAD_TOO_LARGE")
 
@@ -101,8 +101,7 @@ admin_s, _ = login("admin", ADMIN_PW)  # re-login for remaining tests
 
 # ── 6. CSRF Protection ─────────────────────────────────────────
 section("6. CSRF Protection")
-no_csrf = requests.Session()
-no_csrf.cookies.update(admin_s.cookies)
+no_csrf = httpx.Client(cookies=admin_s.cookies, follow_redirects=False)
 r = no_csrf.post(f"{BASE}/console/logout")  # no X-CSRF-Token header
 check("POST /console/logout without CSRF -> 403", r.status_code == 403)
 check("Code: FORBIDDEN", r.json().get("error", {}).get("code") == "FORBIDDEN")
@@ -139,7 +138,7 @@ section("10. Login Lockout (5 failed -> RATE_LIMITED)")
 conn = sqlite3.connect(DB_PATH)
 conn.execute("UPDATE users SET failed_logins=0, locked_until=NULL WHERE username='analyst'")
 conn.commit(); conn.close()
-lock_s = requests.Session()
+lock_s = httpx.Client(follow_redirects=False)
 codes = [lock_s.post(f"{BASE}/console/login", json={"username": "analyst", "password": "wrong"}).status_code for _ in range(6)]
 check("Attempts 1-4 -> 401", all(c == 401 for c in codes[:4]), str(codes[:4]))
 check("Attempt 5 -> 429 RATE_LIMITED", codes[4] == 429, str(codes[4]))
@@ -170,7 +169,7 @@ for op, sql in [("DELETE", "DELETE FROM audit_events"), ("UPDATE", "UPDATE audit
     try:
         conn.execute(sql); conn.commit()
         check(f"{op} audit_events blocked", False, "trigger missing!")
-    except sqlite3.OperationalError as e:
+    except (sqlite3.OperationalError, sqlite3.IntegrityError) as e:
         check(f"{op} audit_events -> trigger blocks it", "audit is append-only" in str(e))
 conn.close()
 
