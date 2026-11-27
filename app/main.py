@@ -40,5 +40,14 @@ def create_app() -> FastAPI:
     return app
 
 
-seed_db()
+_seeded = seed_db()
+if _seeded:
+    print("Seeded users (save these passwords, they will not be shown again):")
+    for _user, _pw in _seeded.items():
+        print(f"  {_user}: {_pw}")
 app = create_app()
+
+
+def get_app() -> FastAPI:
+    """Entry point for uvicorn: uvicorn app.main:get_app --factory"""
+    return app
