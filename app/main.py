@@ -1,6 +1,8 @@
 from fastapi import FastAPI
 
+from app.api.admin import router as admin_router
 from app.api.auth import router as auth_router
+from app.api.data import router as data_router
 from app.api.decoy import router as decoy_router
 from app.db.seed import seed_db
 from app.security.errors import register_error_handlers
@@ -16,6 +18,8 @@ def create_app() -> FastAPI:
     )
     register_error_handlers(app)
     app.include_router(auth_router)
+    app.include_router(data_router)
+    app.include_router(admin_router)
     app.include_router(decoy_router)
 
     @app.get("/health")
