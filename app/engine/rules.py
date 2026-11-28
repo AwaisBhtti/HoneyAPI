@@ -267,3 +267,22 @@ def rule_enumeration(req, fp, recent, c) -> RuleResult:
         "longest_sequential_run": run_len,
         "id_range": [min(ids), max(ids)] if ids else None,
     })
+
+
+
+# ---------- rule: rate spike ----------
+
+@register("rate_spike")
+def rule_rate_spike(req, fp, recent, c) -> RuleResult:
+    window = window_requests(req, recent, c["window_s"])
+    count = len(window)
+    rate = round(count / c["window_s"], 2)
+    triggered = count >= c["threshold"]
+    reason = (f"rate_spike: {count} request(s) from {req.src_ip} in {c['window_s']}s "
+              f"({rate:g} req/s), threshold={c['threshold']:g}")
+    return make_result("rate_spike", c, triggered, scale_score(count, c["threshold"]), reason, {
+        "request_ids": [r.request_id for r in window][-20:],
+        "request_count": count,
+        "window_s": c["window_s"],
+        "rate_per_s": rate,
+    })
