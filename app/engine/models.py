@@ -33,13 +33,14 @@ class NormalizedRequest:
     ts: float
     src_ip: str
     method: str
-    path: str
+    path: str                       # decoded once, dot-segments removed
     query: dict[str, str]
     headers: list[tuple[str, str]]  # ORDER PRESERVED, secrets redacted
     user_agent: str
     body_excerpt: str
     body_len: int
     decoy_id: str | None = None
+    raw_path: str = ""              # decoded once, dot-segments KEPT (for detection)
 
 
 @dataclass(frozen=True)
