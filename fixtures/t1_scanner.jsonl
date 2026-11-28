@@ -1,0 +1,10 @@
+{"t": 0.0, "method": "GET", "path": "/", "sim_ip": "10.2.0.5", "sim_ua": "curl/8.5.0", "label": "malicious", "case": "T1"}
+{"t": 0.5, "method": "GET", "path": "/.env", "sim_ip": "10.2.0.5", "sim_ua": "curl/8.5.0", "label": "malicious", "case": "T1"}
+{"t": 1.0, "method": "GET", "path": "/admin", "sim_ip": "10.2.0.5", "sim_ua": "curl/8.5.0", "label": "malicious", "case": "T1"}
+{"t": 1.5, "method": "GET", "path": "/wp-login.php", "sim_ip": "10.2.0.5", "sim_ua": "curl/8.5.0", "label": "malicious", "case": "T1"}
+{"t": 2.0, "method": "GET", "path": "/backup.zip", "sim_ip": "10.2.0.5", "sim_ua": "curl/8.5.0", "label": "malicious", "case": "T1"}
+{"t": 2.5, "method": "GET", "path": "/phpmyadmin", "sim_ip": "10.2.0.5", "sim_ua": "curl/8.5.0", "label": "malicious", "case": "T1"}
+{"t": 3.0, "method": "GET", "path": "/.git/config", "sim_ip": "10.2.0.5", "sim_ua": "curl/8.5.0", "label": "malicious", "case": "T1"}
+{"t": 10.0, "method": "GET", "path": "/", "sim_ip": "10.2.0.9", "sim_ua": "Mozilla/5.00 (Nikto/2.5.0)", "label": "malicious", "case": "T1"}
+{"t": 10.5, "method": "GET", "path": "/cgi-bin/test", "sim_ip": "10.2.0.9", "sim_ua": "Mozilla/5.00 (Nikto/2.5.0)", "label": "malicious", "case": "T1"}
+{"t": 11.0, "method": "GET", "path": "/admin", "sim_ip": "10.2.0.9", "sim_ua": "Mozilla/5.00 (Nikto/2.5.0)", "label": "malicious", "case": "T1"}

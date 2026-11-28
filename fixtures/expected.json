@@ -1,0 +1,65 @@
+{
+  "normal.jsonl": {
+    "case": "Baseline",
+    "expected_rules": [],
+    "expect_alert": false
+  },
+  "t1_scanner.jsonl": {
+    "case": "T1",
+    "expected_rules": [
+      "scanner"
+    ],
+    "expect_alert": true
+  },
+  "t2_credstuff.jsonl": {
+    "case": "T2",
+    "expected_rules": [
+      "cred_stuffing"
+    ],
+    "expect_alert": true
+  },
+  "t3_enum.jsonl": {
+    "case": "T3",
+    "expected_rules": [
+      "enumeration"
+    ],
+    "expect_alert": true
+  },
+  "t4_injection.jsonl": {
+    "case": "T4",
+    "expected_rules": [
+      "injection"
+    ],
+    "expect_alert": true
+  },
+  "t5_ratespike.jsonl": {
+    "case": "T5",
+    "expected_rules": [
+      "rate_spike"
+    ],
+    "expect_alert": true
+  },
+  "t6_privacy.jsonl": {
+    "case": "T6",
+    "expected_rules": [],
+    "expect_alert": false,
+    "forbidden_strings": [
+      "FAKE-bearer-token-ABC123",
+      "FAKE-query-token-XYZ789",
+      "FAKE-form-password-111",
+      "FAKE-json-password-222",
+      "FAKE-cookie-value-333",
+      "FAKE-api-key-444"
+    ]
+  },
+  "malformed.jsonl": {
+    "case": "T-final",
+    "expect_reject_lines": [
+      2,
+      3,
+      4,
+      5,
+      6
+    ]
+  }
+}

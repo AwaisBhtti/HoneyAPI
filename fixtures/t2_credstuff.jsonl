@@ -1,0 +1,12 @@
+{"t": 0.0, "method": "POST", "path": "/wp-login.php", "sim_ip": "10.3.0.7", "sim_ua": "python-requests/2.31.0", "label": "malicious", "case": "T2", "body": "log=user00&pwd=FakePass0!"}
+{"t": 1.5, "method": "POST", "path": "/wp-login.php", "sim_ip": "10.3.0.7", "sim_ua": "python-requests/2.31.0", "label": "malicious", "case": "T2", "body": "log=user01&pwd=FakePass1!"}
+{"t": 3.0, "method": "POST", "path": "/wp-login.php", "sim_ip": "10.3.0.7", "sim_ua": "python-requests/2.31.0", "label": "malicious", "case": "T2", "body": "log=user02&pwd=FakePass2!"}
+{"t": 4.5, "method": "POST", "path": "/wp-login.php", "sim_ip": "10.3.0.7", "sim_ua": "python-requests/2.31.0", "label": "malicious", "case": "T2", "body": "log=user03&pwd=FakePass3!"}
+{"t": 6.0, "method": "POST", "path": "/wp-login.php", "sim_ip": "10.3.0.7", "sim_ua": "python-requests/2.31.0", "label": "malicious", "case": "T2", "body": "log=user04&pwd=FakePass4!"}
+{"t": 7.5, "method": "POST", "path": "/wp-login.php", "sim_ip": "10.3.0.7", "sim_ua": "python-requests/2.31.0", "label": "malicious", "case": "T2", "body": "log=user05&pwd=FakePass5!"}
+{"t": 9.0, "method": "POST", "path": "/wp-login.php", "sim_ip": "10.3.0.7", "sim_ua": "python-requests/2.31.0", "label": "malicious", "case": "T2", "body": "log=user06&pwd=FakePass6!"}
+{"t": 10.5, "method": "POST", "path": "/wp-login.php", "sim_ip": "10.3.0.7", "sim_ua": "python-requests/2.31.0", "label": "malicious", "case": "T2", "body": "log=user07&pwd=FakePass7!"}
+{"t": 12.0, "method": "POST", "path": "/wp-login.php", "sim_ip": "10.3.0.7", "sim_ua": "python-requests/2.31.0", "label": "malicious", "case": "T2", "body": "log=user08&pwd=FakePass8!"}
+{"t": 13.5, "method": "POST", "path": "/wp-login.php", "sim_ip": "10.3.0.7", "sim_ua": "python-requests/2.31.0", "label": "malicious", "case": "T2", "body": "log=user09&pwd=FakePass9!"}
+{"t": 15.0, "method": "POST", "path": "/wp-login.php", "sim_ip": "10.3.0.7", "sim_ua": "python-requests/2.31.0", "label": "malicious", "case": "T2", "body": "log=user10&pwd=FakePass10!"}
+{"t": 16.5, "method": "POST", "path": "/wp-login.php", "sim_ip": "10.3.0.7", "sim_ua": "python-requests/2.31.0", "label": "malicious", "case": "T2", "body": "log=user11&pwd=FakePass11!"}

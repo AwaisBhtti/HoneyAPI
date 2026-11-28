@@ -1,0 +1,15 @@
+{"t": 0.0, "method": "GET", "path": "/", "sim_ip": "10.1.0.1", "sim_ua": "Mozilla/5.0 (X11; Linux x86_64) HoneyAPI-Fixture/1.0", "label": "benign", "case": "Baseline"}
+{"t": 3.0, "method": "GET", "path": "/", "sim_ip": "10.1.0.2", "sim_ua": "Mozilla/5.0 (X11; Linux x86_64) HoneyAPI-Fixture/1.0", "label": "benign", "case": "Baseline"}
+{"t": 6.0, "method": "GET", "path": "/", "sim_ip": "10.1.0.3", "sim_ua": "Mozilla/5.0 (X11; Linux x86_64) HoneyAPI-Fixture/1.0", "label": "benign", "case": "Baseline"}
+{"t": 9.0, "method": "GET", "path": "/", "sim_ip": "10.1.0.4", "sim_ua": "Mozilla/5.0 (X11; Linux x86_64) HoneyAPI-Fixture/1.0", "label": "benign", "case": "Baseline"}
+{"t": 20.0, "method": "GET", "path": "/about", "sim_ip": "10.1.0.1", "sim_ua": "Mozilla/5.0 (X11; Linux x86_64) HoneyAPI-Fixture/1.0", "label": "benign", "case": "Baseline"}
+{"t": 23.0, "method": "GET", "path": "/contact", "sim_ip": "10.1.0.2", "sim_ua": "Mozilla/5.0 (X11; Linux x86_64) HoneyAPI-Fixture/1.0", "label": "benign", "case": "Baseline"}
+{"t": 26.0, "method": "GET", "path": "/blog", "sim_ip": "10.1.0.3", "sim_ua": "Mozilla/5.0 (X11; Linux x86_64) HoneyAPI-Fixture/1.0", "label": "benign", "case": "Baseline"}
+{"t": 29.0, "method": "GET", "path": "/products", "sim_ip": "10.1.0.4", "sim_ua": "Mozilla/5.0 (X11; Linux x86_64) HoneyAPI-Fixture/1.0", "label": "benign", "case": "Baseline"}
+{"t": 40.0, "method": "GET", "path": "/products", "sim_ip": "10.1.0.1", "sim_ua": "Mozilla/5.0 (X11; Linux x86_64) HoneyAPI-Fixture/1.0", "label": "benign", "case": "Baseline"}
+{"t": 43.0, "method": "GET", "path": "/products", "sim_ip": "10.1.0.2", "sim_ua": "Mozilla/5.0 (X11; Linux x86_64) HoneyAPI-Fixture/1.0", "label": "benign", "case": "Baseline"}
+{"t": 46.0, "method": "GET", "path": "/about", "sim_ip": "10.1.0.3", "sim_ua": "Mozilla/5.0 (X11; Linux x86_64) HoneyAPI-Fixture/1.0", "label": "benign", "case": "Baseline"}
+{"t": 49.0, "method": "GET", "path": "/blog", "sim_ip": "10.1.0.4", "sim_ua": "Mozilla/5.0 (X11; Linux x86_64) HoneyAPI-Fixture/1.0", "label": "benign", "case": "Baseline"}
+{"t": 61.0, "method": "POST", "path": "/wp-login.php", "sim_ip": "10.1.0.2", "sim_ua": "Mozilla/5.0 (X11; Linux x86_64) HoneyAPI-Fixture/1.0", "label": "benign", "case": "Baseline", "body": "log=alice&pwd=fixture-not-a-real-password"}
+{"t": 70.0, "method": "GET", "path": "/search", "sim_ip": "10.1.0.3", "sim_ua": "Mozilla/5.0 (X11; Linux x86_64) HoneyAPI-Fixture/1.0", "label": "benign", "case": "Baseline", "query": {"q": "O'Brien order=asc"}}
+{"t": 75.0, "method": "GET", "path": "/api/v1/users", "sim_ip": "10.1.0.4", "sim_ua": "Mozilla/5.0 (X11; Linux x86_64) HoneyAPI-Fixture/1.0", "label": "benign", "case": "Baseline"}

@@ -1,0 +1,10 @@
+{"t": 1.5, "method": "GET", "path": "/api/v1/users/1", "sim_ip": "10.4.0.3", "sim_ua": "Go-http-client/1.1", "label": "malicious", "case": "T3"}
+{"t": 3.0, "method": "GET", "path": "/api/v1/users/2", "sim_ip": "10.4.0.3", "sim_ua": "Go-http-client/1.1", "label": "malicious", "case": "T3"}
+{"t": 4.5, "method": "GET", "path": "/api/v1/users/3", "sim_ip": "10.4.0.3", "sim_ua": "Go-http-client/1.1", "label": "malicious", "case": "T3"}
+{"t": 6.0, "method": "GET", "path": "/api/v1/users/4", "sim_ip": "10.4.0.3", "sim_ua": "Go-http-client/1.1", "label": "malicious", "case": "T3"}
+{"t": 7.5, "method": "GET", "path": "/api/v1/users/5", "sim_ip": "10.4.0.3", "sim_ua": "Go-http-client/1.1", "label": "malicious", "case": "T3"}
+{"t": 9.0, "method": "GET", "path": "/api/v1/users/6", "sim_ip": "10.4.0.3", "sim_ua": "Go-http-client/1.1", "label": "malicious", "case": "T3"}
+{"t": 10.5, "method": "GET", "path": "/api/v1/users/7", "sim_ip": "10.4.0.3", "sim_ua": "Go-http-client/1.1", "label": "malicious", "case": "T3"}
+{"t": 12.0, "method": "GET", "path": "/api/v1/users/8", "sim_ip": "10.4.0.3", "sim_ua": "Go-http-client/1.1", "label": "malicious", "case": "T3"}
+{"t": 13.5, "method": "GET", "path": "/api/v1/users/9", "sim_ip": "10.4.0.3", "sim_ua": "Go-http-client/1.1", "label": "malicious", "case": "T3"}
+{"t": 15.0, "method": "GET", "path": "/api/v1/users/10", "sim_ip": "10.4.0.3", "sim_ua": "Go-http-client/1.1", "label": "malicious", "case": "T3"}

@@ -1,0 +1,8 @@
+{"t": 0, "method": "GET", "path": "/api/v1/users", "sim_ip": "10.5.0.8", "sim_ua": "curl/8.5.0", "label": "malicious", "case": "T4", "query": {"id": "' OR '1'='1"}}
+{"t": 2, "method": "GET", "path": "/search", "sim_ip": "10.5.0.20", "sim_ua": "Mozilla/5.0 (X11; Linux x86_64) HoneyAPI-Fixture/1.0", "label": "benign", "case": "T4", "query": {"q": "shoes"}}
+{"t": 3, "method": "GET", "path": "/search", "sim_ip": "10.5.0.8", "sim_ua": "curl/8.5.0", "label": "malicious", "case": "T4", "query": {"q": "1 UNION SELECT username, password FROM users"}}
+{"t": 6, "method": "GET", "path": "/search", "sim_ip": "10.5.0.8", "sim_ua": "curl/8.5.0", "label": "malicious", "case": "T4", "query": {"q": "<script>alert(1)</script>"}}
+{"t": 8, "method": "GET", "path": "/products", "sim_ip": "10.5.0.20", "sim_ua": "Mozilla/5.0 (X11; Linux x86_64) HoneyAPI-Fixture/1.0", "label": "benign", "case": "T4"}
+{"t": 9, "method": "GET", "path": "/files/../../etc/passwd", "sim_ip": "10.5.0.8", "sim_ua": "curl/8.5.0", "label": "malicious", "case": "T4"}
+{"t": 12, "method": "POST", "path": "/api/v1/login", "sim_ip": "10.5.0.8", "sim_ua": "curl/8.5.0", "label": "malicious", "case": "T4", "body": "{\"username\": \"admin' --\", \"password\": \"x\"}"}
+{"t": 15, "method": "GET", "path": "/ping", "sim_ip": "10.5.0.8", "sim_ua": "curl/8.5.0", "label": "malicious", "case": "T4", "query": {"host": "127.0.0.1; cat /etc/passwd"}}
