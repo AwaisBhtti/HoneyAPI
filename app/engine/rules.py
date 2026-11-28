@@ -166,3 +166,49 @@ def rule_scanner(req, fp, recent, c) -> RuleResult:
         "paths": distinct,
         "scanner_ua": family if scanner_ua else None,
     })
+
+
+
+# ---------- rule: credential stuffing / brute force ----------
+
+_USERNAME_RE = re.compile(
+    r"""(?i)(?:^|[&\s{,"'])(?:username|user|email|log|login)["']?\s*[=:]\s*["']?([^&"'\s,}]+)"""
+)
+
+
+def is_login_path(path: str) -> bool:
+    p = path.lower().rstrip("/")
+    return "login" in p or p == "/xmlrpc.php"
+
+
+def extract_username(body: str) -> str | None:
+    m = _USERNAME_RE.search(body or "")
+    return m.group(1) if m else None
+
+
+@register("cred_stuffing")
+def rule_cred_stuffing(req, fp, recent, c) -> RuleResult:
+    window = window_requests(req, recent, c["window_s"])
+    attempts = [r for r in window if r.method == "POST" and is_login_path(r.path)]
+    usernames = {u for u in (extract_username(r.body_excerpt) for r in attempts) if u}
+
+    count = len(attempts)
+    triggered = count >= c["threshold"]
+    score = scale_score(count, c["threshold"])
+    if len(usernames) >= 3:
+        pattern = "credential stuffing (many usernames)"
+    else:
+        pattern = "brute force (few usernames)"
+
+    paths = sorted({r.path.lower() for r in attempts})
+    reason = (f"cred_stuffing: {count} login POST(s) with {len(usernames)} distinct username(s) "
+              f"from {req.src_ip} in {c['window_s']}s, threshold={c['threshold']:g}")
+    if triggered:
+        reason += f" -> {pattern}"
+    return make_result("cred_stuffing", c, triggered, score, reason, {
+        "request_ids": [r.request_id for r in attempts][-20:],
+        "paths": paths,
+        "attempt_count": count,
+        "distinct_usernames": len(usernames),
+        "pattern": pattern if triggered else None,
+    })
