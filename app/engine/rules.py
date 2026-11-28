@@ -121,3 +121,48 @@ def rule_injection(req, fp, recent, c) -> RuleResult:
         reason = f"injection: no suspicious patterns found, threshold={c['threshold']:g}"
     return make_result("injection", c, triggered, score, reason,
                        {"request_ids": [req.request_id], "matches": matches})
+
+
+
+# ---------- rule: scanner ----------
+
+SENSITIVE_PATHS = {
+    "/.env", "/admin", "/wp-login.php", "/backup.zip", "/phpmyadmin",
+    "/config.php", "/server-status", "/wp-config.php", "/web.config",
+    "/api/v1/users", "/id_rsa", "/backup.sql", "/db.sql",
+}
+SENSITIVE_PREFIXES = ("/.git", "/.aws", "/.ssh", "/wp-admin", "/phpmyadmin", "/cgi-bin")
+SCANNER_UA_FAMILIES = {"sqlmap", "nikto", "nmap", "gobuster", "dirbuster", "wpscan", "masscan", "hydra"}
+
+
+def is_sensitive_path(path: str) -> bool:
+    p = path.lower().rstrip("/") or "/"
+    return p in SENSITIVE_PATHS or p.startswith(SENSITIVE_PREFIXES)
+
+
+@register("scanner")
+def rule_scanner(req, fp, recent, c) -> RuleResult:
+    window = window_requests(req, recent, c["window_s"])
+    hits = [r for r in window if is_sensitive_path(r.path)]
+    distinct = sorted({r.path.lower() for r in hits})
+    family = fp.components.get("ua_family", "")
+    scanner_ua = family in SCANNER_UA_FAMILIES
+
+    count = len(distinct)
+    triggered = scanner_ua or count >= c["threshold"]
+    score = scale_score(count, c["threshold"])
+    if scanner_ua:
+        score = max(80.0, score)
+
+    shown = ", ".join(distinct[:6]) or "none"
+    if scanner_ua:
+        reason = (f"scanner: known scanner tool '{family}' in User-Agent; {count} distinct sensitive "
+                  f"path(s) in {c['window_s']}s ({shown}), threshold={c['threshold']:g}")
+    else:
+        reason = (f"scanner: {count} distinct sensitive path(s) from {req.src_ip} in "
+                  f"{c['window_s']}s ({shown}), threshold={c['threshold']:g}")
+    return make_result("scanner", c, triggered, score, reason, {
+        "request_ids": [r.request_id for r in hits][-20:],
+        "paths": distinct,
+        "scanner_ua": family if scanner_ua else None,
+    })
