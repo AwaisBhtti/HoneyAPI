@@ -212,3 +212,58 @@ def rule_cred_stuffing(req, fp, recent, c) -> RuleResult:
         "distinct_usernames": len(usernames),
         "pattern": pattern if triggered else None,
     })
+
+
+
+# ---------- rule: enumeration ----------
+
+_ID_PATH_RE = re.compile(r"^(.*)/(\d+)$")
+
+
+def split_id_path(path: str) -> tuple[str, int] | None:
+    m = _ID_PATH_RE.match(path.rstrip("/"))
+    if not m:
+        return None
+    return (m.group(1) or "/", int(m.group(2)))
+
+
+def longest_sequential_run(ids: list[int]) -> int:
+    ordered = sorted(set(ids))
+    best = run_len = 1 if ordered else 0
+    for prev, cur in zip(ordered, ordered[1:]):
+        run_len = run_len + 1 if cur == prev + 1 else 1
+        best = max(best, run_len)
+    return best
+
+
+@register("enumeration")
+def rule_enumeration(req, fp, recent, c) -> RuleResult:
+    window = window_requests(req, recent, c["window_s"])
+    groups: dict[str, dict[int, str]] = {}  # parent path -> {id: request_id}
+    for r in window:
+        parsed = split_id_path(r.path)
+        if parsed:
+            parent, ident = parsed
+            groups.setdefault(parent, {})[ident] = r.request_id
+
+    parent, ids = max(groups.items(), key=lambda kv: len(kv[1]), default=("", {}))
+    count = len(ids)
+    run_len = longest_sequential_run(list(ids))
+    triggered = count >= c["threshold"]
+
+    score = scale_score(count, c["threshold"])
+    if run_len >= c["threshold"]:
+        score = min(100.0, score + 10.0)
+
+    if count:
+        reason = (f"enumeration: {count} distinct ID(s) under {parent} from {req.src_ip} in "
+                  f"{c['window_s']}s (longest sequential run {run_len}), threshold={c['threshold']:g}")
+    else:
+        reason = f"enumeration: no ID-style paths from {req.src_ip}, threshold={c['threshold']:g}"
+    return make_result("enumeration", c, triggered, score, reason, {
+        "request_ids": list(ids.values())[-20:],
+        "parent_path": parent,
+        "distinct_ids": count,
+        "longest_sequential_run": run_len,
+        "id_range": [min(ids), max(ids)] if ids else None,
+    })
